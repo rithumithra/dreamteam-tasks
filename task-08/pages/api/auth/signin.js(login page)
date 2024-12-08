@@ -1,0 +1,150 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/router";
+
+export default function Signup() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const router = useRouter();
+
+  const validateEmail = (email) => {
+    return email.includes("@") && email.includes(".com");
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 6;
+  };
+
+  const handleSignup = async (event) => {
+    event.preventDefault();
+
+    setEmailError("");
+    setPasswordError("");
+
+    
+    if (!validateEmail(email)) {
+      setEmailError("Please include '@' and '.com' in your email.");
+      return;
+    }
+
+   
+    if (!validatePassword(password)) {
+      setPasswordError("Password must be at least 6 characters long.");
+      return;
+    }
+
+    
+    alert("Signup successful!");
+
+   
+    document.cookie = `userLoggedIn=true; path=/; max-age=3600`; 
+
+    router.push("/dashboard"); 
+  };
+
+  return (
+    <div style={styles.container}>
+      <div style={styles.formWrapper}>
+        <h1 style={styles.heading}>Sign Up</h1>
+        <form onSubmit={handleSignup} autoComplete="off" style={styles.form}>
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="off" 
+            style={styles.input}
+          />
+          {emailError && <p style={styles.error}>{emailError}</p>}
+
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="off" 
+            style={styles.input}
+          />
+          {passwordError && <p style={styles.error}>{passwordError}</p>}
+
+          <button type="submit" style={styles.button}>
+            Sign Up
+          </button>
+        </form>
+        <p style={styles.footerText}>
+          Already have an account? <a href="/signin" style={styles.link}>Log In</a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+const styles = {
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    backgroundColor: "#121212",
+    color: "#FFFFFF",
+  },
+  formWrapper: {
+    backgroundColor: "#1E1E1E",
+    borderRadius: "10px",
+    padding: "40px",
+    boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.5)",
+    textAlign: "center",
+    maxWidth: "400px",
+    width: "100%",
+  },
+  heading: {
+    fontSize: "28px",
+    marginBottom: "20px",
+    color: "#E50914",
+    fontFamily: "Arial, sans-serif",
+  },
+  error: {
+    color: "#E50914",
+    marginBottom: "15px",
+    fontSize: "14px",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
+  },
+  input: {
+    padding: "12px",
+    border: "none",
+    borderRadius: "5px",
+    fontSize: "16px",
+    outline: "none",
+    backgroundColor: "#2E2E2E",
+    color: "#FFF",
+  },
+  button: {
+    backgroundColor: "#E50914",
+    border: "none",
+    color: "#FFF",
+    padding: "12px",
+    borderRadius: "5px",
+    fontSize: "16px",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
+  },
+  footerText: {
+    marginTop: "15px",
+    fontSize: "14px",
+  },
+  link: {
+    color: "#E50914",
+    textDecoration: "none",
+  },
+};
